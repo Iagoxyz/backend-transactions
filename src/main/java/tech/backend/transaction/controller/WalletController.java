@@ -4,6 +4,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import tech.backend.transaction.controller.dto.CreateWalletDto;
 import tech.backend.transaction.entity.Wallet;
 import tech.backend.transaction.service.WalletService;
 
@@ -17,8 +18,9 @@ public class WalletController {
     }
 
     @PostMapping("/wallets")
-    public ResponseEntity<Wallet> createWallet(@RequestBody CreateWalletDto) {
-
+    public ResponseEntity<Wallet> createWallet(@RequestBody CreateWalletDto dto) {
+            var wallet = walletService.createWallet(dto);
+            return ResponseEntity.ok(wallet);
     }
 
 }

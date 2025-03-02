@@ -1,8 +1,6 @@
 package tech.backend.transaction.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "tb_wallet_type")

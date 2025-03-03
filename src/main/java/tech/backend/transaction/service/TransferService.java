@@ -2,6 +2,7 @@ package tech.backend.transaction.service;
 
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import tech.backend.transaction.controller.dto.TransferDto;
 import tech.backend.transaction.entity.Transfer;
 import tech.backend.transaction.entity.Wallet;
@@ -10,6 +11,7 @@ import tech.backend.transaction.repository.TransferRepository;
 import tech.backend.transaction.repository.WalletRepository;
 
 import java.math.BigDecimal;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 public class TransferService {
@@ -26,6 +28,7 @@ public class TransferService {
         this.walletRepository = walletRepository;
     }
 
+    @Transactional
     public Transfer transfer(TransferDto transferDto) {
         var sender = walletRepository.findById(transferDto.payer()).orElseThrow(() -> new WalletNotFoundException(transferDto.payer()));
         var receiver = walletRepository.findById(transferDto.payee()).orElseThrow(() -> new WalletNotFoundException(transferDto.payee()));
@@ -40,6 +43,8 @@ public class TransferService {
         walletRepository.save(sender);
         walletRepository.save(receiver);
         var transferResult = transferRepository.save(transfer);
+
+        CompletableFuture.runAsync(() -> notificationService.sendNotification(transferResult));
 
         return transferResult;
     }

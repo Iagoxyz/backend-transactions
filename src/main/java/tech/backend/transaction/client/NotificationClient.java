@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import tech.backend.transaction.entity.Transfer;
 
 @FeignClient(
+        name = "NotificationClient",
         url = "${client.notification-service.url}"
 )
 public interface NotificationClient {

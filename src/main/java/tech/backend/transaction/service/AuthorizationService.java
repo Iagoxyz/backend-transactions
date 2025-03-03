@@ -2,7 +2,8 @@ package tech.backend.transaction.service;
 
 import org.springframework.stereotype.Service;
 import tech.backend.transaction.client.AuthorizationClient;
-import tech.backend.transaction.entity.Transfer;
+import tech.backend.transaction.controller.dto.TransferDto;
+
 import tech.backend.transaction.exception.TransactionException;
 
 @Service
@@ -14,7 +15,7 @@ public class AuthorizationService {
         this.authorizationClient = authorizationClient;
     }
 
-    public boolean isAuthorized(Transfer transfer) {
+    public boolean isAuthorized(TransferDto transfer) {
 
         var resp = authorizationClient.isAuthorized();
 

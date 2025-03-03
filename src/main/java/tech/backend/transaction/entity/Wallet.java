@@ -1,12 +1,15 @@
 package tech.backend.transaction.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
 
 @Entity
 @Table(name = "tb_wallet")
 public class Wallet {
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,6 +43,22 @@ public class Wallet {
         this.email = email;
         this.password = password;
         this.walletType = walletType;
+    }
+
+    public boolean isTransferAllowedForWalletType() {
+        return this.walletType.equals(WalletType.Enum.USER.get());
+    }
+
+    public boolean isBalanceBiggerThan(@DecimalMin("0.01") @NotNull BigDecimal value) {
+        return this.balance.doubleValue() > value.doubleValue();
+    }
+
+    public void debit(@DecimalMin("0.01") @NotNull BigDecimal value) {
+       this.balance = this.balance.min(value);
+    }
+
+    public void credit(@DecimalMin("0.01") @NotNull BigDecimal value) {
+       this.balance = this.balance.add(value);
     }
 
     public Long getId() {
@@ -97,4 +116,6 @@ public class Wallet {
     public void setWalletType(WalletType walletType) {
         this.walletType = walletType;
     }
+
+
 }
